@@ -3,8 +3,10 @@ import App from './App.vue'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import axios from '@/utils/http'
 import store from './store'
 import '@/assets/styles/_variables.scss';
+Vue.prototype.$axios = axios;
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
