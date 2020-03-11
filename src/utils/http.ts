@@ -18,8 +18,8 @@ const service = axios.create({
 // 请求拦截
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    if (localStorage.tsToken) {
-      config.headers.Authorization = localStorage.tsToken;
+    if (sessionStorage.tsToken) {
+      config.headers.Authorization = sessionStorage.tsToken;
     }
     return config;
   },
@@ -39,7 +39,7 @@ service.interceptors.response.use(
       switch (err.response.status) {
         case 401:
           errMsg = '登录状态失效，请重新登录';
-          localStorage.removeItem('tsToken');
+          sessionStorage.removeItem('tsToken');
           router.push('/login');
           break;
         case 403:

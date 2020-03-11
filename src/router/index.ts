@@ -1,14 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import jwt_decode from 'jwt-decode'
-import Home from '../views/Home.vue'
+import Dashboard from '../views/dashboard/index.vue'
+import Home from '../views/home/Home.vue'
 Vue.use(VueRouter)
 
-const routes = [
+const routes:any = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: { name:'淘票票管理系统',path:'/' },
+    children:[
+      {
+        path:'/home',
+        name:'Home',
+        component:Home,
+        meta: { name:'首页',path:'/home' }
+      }
+    ]
+  },
+  {
+    path:'/',
+    redirect: '/home'
   },
   {
     path:'/login',
@@ -25,13 +39,13 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to,from,next)=>{
-  const isLogin = localStorage.loginToken ? true : false;
+router.beforeEach((to:any,from:any,next:any)=>{
+  const isLogin = sessionStorage.loginToken ? true : false;
   if(to.path=='/login' || to.path=='/retrievePassword') {
     next();
   }else {
     if(isLogin) {
-      const decode :any = jwt_decode(localStorage.loginToken);
+      const decode :any = jwt_decode(sessionStorage.loginToken);
       console.log(decode)
       const { key } = decode;
       next();

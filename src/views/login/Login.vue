@@ -1,7 +1,6 @@
 <template>
   <div class="login">
     <LoginHeader>
-      
       <el-form
         :model="loginForm"
         :rules="loginRules"
@@ -47,7 +46,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Provide } from "vue-property-decorator";
+import { Component, Vue, Provide} from "vue-property-decorator";
+import { State,Getter,Mutation,Action }  from 'vuex-class'
 import LoginHeader from "@/components/LoginHeader.vue";
 @Component({
   components: {
@@ -55,6 +55,8 @@ import LoginHeader from "@/components/LoginHeader.vue";
   }
 })
 export default class Login extends Vue {
+  // 存储用户信息
+  @Action('setUser') setUser:any;
   private isLogin: boolean = false;
   @Provide() loginForm: {
     username: String;
@@ -79,12 +81,13 @@ export default class Login extends Vue {
             console.log(res.data);
             if (res.status=='200') {
               this.isLogin = false;
-              localStorage.setItem('loginToken',res.data.token); 
+              sessionStorage.setItem('loginToken',res.data.token); 
+              this.setUser(res.data.token);
+              this.$router.push('/');
               this.$message({
                 message:res.data.msg,
                 type: 'success'
               });
-              this.$router.push('/');
             }
           })
           .catch((err: any) => {
